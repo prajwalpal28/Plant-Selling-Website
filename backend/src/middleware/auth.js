@@ -1,60 +1,58 @@
-// jsonwebtoken to generate secret
 const jwt = require('jsonwebtoken');
-
-// import the model for user 
 const userModel = require('../model/userModel/user');
 const nurseryModel = require('../model/nurseryModel/nursery');
 
-
 const auth = async (req, res, next) => {
     try {
-        //? request to the browser for the cookies 
-        const token = req.cookies.auth;
+        // Extract token from cookies
+        const token = req.cookies?.auth;
 
-        //! if the token is null
         if (!token) {
-            const error = new Error("Authentication failed");
-            error.statusCode = 401;
-            throw error;
-        };
+            return res.status(401).json({ message: "Authentication failed: No token provided." });
+        }
 
-        //? verify the jwt token and return the document id 
-        const verifyUser = jwt.verify(token, process.env.SECRET_KEY);
+        let verifyUser;
+        try {
+            // Verify JWT token
+            verifyUser = jwt.verify(token, process.env.SECRET_KEY);
+        } catch (err) {
+            // Handle invalid or expired tokens
+            if (err.name === "TokenExpiredError") {
+                return res.status(401).json({ message: "Authentication failed: Token has expired." });
+            }
+            return res.status(401).json({ message: "Authentication failed: Invalid token." });
+        }
 
-        //? find the right user from the database 
+        // Fetch user from the database
         const user = await userModel.findOne({ _id: verifyUser._id }).select({ _id: 1, role: 1, isUserVerified: 1 });
 
-        //! if user not found
         if (!user) {
-            const error = new Error("Authentication failed");
-            error.statusCode = 401;
-            throw error;
+            return res.status(401).json({ message: "Authentication failed: User not found." });
         }
 
-        //! if user is not verified
         if (!user.isUserVerified) {
-            const error = new Error("Your Account is not verified please login and verify your account");
-            error.statusCode = 401;
-            throw error;
+            return res.status(401).json({ message: "User account not verified. Please verify your email." });
         }
 
+        // Attach user info to the request object
         req.token = token;
         req.user = user._id;
         req.role = user.role;
 
-        if (req.role.includes("seller")) {
+        // Additional check for "seller" role
+        if (req.role?.includes("seller")) {
             const nursery = await nurseryModel.findOne({ user: user._id }).select({ _id: 1 });
+            if (!nursery) {
+                return res.status(404).json({ message: "Authentication failed: Nursery not found for this seller." });
+            }
             req.nursery = nursery._id;
         }
 
-        next();
-
+        next(); // Proceed to the next middleware or route handler
     } catch (error) {
-        next(error); //! Pass the error to the error handling middleware
+        console.error("Authentication middleware error:", error.message);
+        res.status(500).json({ message: "An unexpected error occurred during authentication." });
     }
-
-}
-
-
+};
 
 module.exports = auth;

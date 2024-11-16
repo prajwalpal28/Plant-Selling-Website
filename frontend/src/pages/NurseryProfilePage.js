@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { nurseryProfileAsync } from '../features/nursery/nurserySlice';
 import { useNavigate } from 'react-router-dom';
 import NurseryHeader from '../features/nursery/Components/NurseryHeader';
@@ -10,27 +10,27 @@ const NurseryProfilePage = () => {
   const nursery = useSelector(state => state.nursery.nursery);
   const error = useSelector(state => state.nursery.error);
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
-  document.title = nursery && nursery.nurseryName || "Manage Your Nursery";
-
-
-  useEffect(() => {
-    !nursery && dispatch(nurseryProfileAsync())
-  }, [dispatch])
+  // Clarify the intended logic with parentheses
+  document.title = (nursery && nursery.nurseryName) || "Manage Your Nursery";
 
   useEffect(() => {
-    if (error) navigate('/profile');
-    error && message.error(error.message);
-  }, [dispatch, error]);
+    if (!nursery) {
+      dispatch(nurseryProfileAsync());
+    }
+  }, [dispatch, nursery]); // Add nursery as a dependency
 
-
+  useEffect(() => {
+    if (error) {
+      navigate('/profile');
+      message.error(error.message);
+    }
+  }, [dispatch, error, navigate]); // Add navigate as a dependency
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
-      {
-        nursery &&
+      {nursery && (
         <div className="container py-3">
           <div className="row mb-2">
             <NurseryHeader />
@@ -39,9 +39,9 @@ const NurseryProfilePage = () => {
             <NurseryBody />
           </div>
         </div>
-      }
+      )}
     </section>
-  )
-}
+  );
+};
 
-export default NurseryProfilePage
+export default NurseryProfilePage;

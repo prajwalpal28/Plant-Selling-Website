@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { updateOrderAfterConfirmPaymentAsync } from '../order/orderSlice';
@@ -9,36 +9,31 @@ const Success = () => {
     const [payment, client, status] = window.location.search && window.location.search.split("&");
 
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
-
-    
-
-    //TODO: move to utils folder of successPaymentPage
-    function handelUpdateOrderAfterConfirmPayment() {
-        if (!payment || !client || !status) {
-            navigate('/');
-            return;
-        }
-
-        const [paymentKey, paymentValue] = payment.split("=");
-        const [statusKey, statusValue] = status.split("=");
-
-        const data = {
-            paymentInfo: {
-                paymentId: paymentKey === "?payment_intent" ? paymentValue : null,
-                status: statusKey === "redirect_status" ? statusValue : null,
-            },
-            navigate
-        }
-
-        dispatch(updateOrderAfterConfirmPaymentAsync(data))
-    }
-
     useEffect(() => {
+        function handelUpdateOrderAfterConfirmPayment() {
+            if (!payment || !client || !status) {
+                navigate('/');
+                return;
+            }
+
+            const [paymentKey, paymentValue] = payment.split("=");
+            const [statusKey, statusValue] = status.split("=");
+
+            const data = {
+                paymentInfo: {
+                    paymentId: paymentKey === "?payment_intent" ? paymentValue : null,
+                    status: statusKey === "redirect_status" ? statusValue : null,
+                },
+                navigate
+            };
+
+            dispatch(updateOrderAfterConfirmPaymentAsync(data));
+        }
+
         handelUpdateOrderAfterConfirmPayment();
-    }, []);
+    }, [payment, client, status, dispatch, navigate]);  // Added dependencies to avoid re-run on each render
 
     return (
         <div className='bg-dark row d-flex justify-content-center align-content-center m-0' style={{ width: "100%", minHeight: "100vh", position: "fixed", top: "0", left: "0", zIndex: 1 }}>
@@ -46,7 +41,7 @@ const Success = () => {
                 <strong>✔ Order Done!</strong> through online Payments.
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Success
+export default Success;

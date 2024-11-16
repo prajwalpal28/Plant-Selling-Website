@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
-import Payment from './Payment'
+import React, { useEffect, useState, useCallback } from 'react';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import Payment from './Payment';
 import { useNavigate } from 'react-router-dom';
 import { Steps, message } from 'antd';
 import handelDataFetchCheckout from '../checkoutAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrderHistoryAsync } from '../../order/orderSlice';
-
 
 const Checkout = () => {
   const [clientKey, setClientKey] = useState("");
@@ -20,9 +19,7 @@ const Checkout = () => {
   const user = useSelector(state => state.user.user);
 
   const dispatch = useDispatch();
-
   const activeStep = 2;
-
   const navigate = useNavigate();
 
   const stepsOptions = [
@@ -33,78 +30,76 @@ const Checkout = () => {
     },
     {
       title: 'Confirm Order',
-      icon: <span className='	fas fa-check-square'></span>,
+      icon: <span className='fas fa-check-square'></span>,
       disabled: true
     },
     {
       title: 'Payment',
       icon: <span className='fas fa-university'></span>,
-    },];
+    }
+  ];
 
+  // Memoize the functions with useCallback
+  const handelInitOrder = useCallback((payment) => {
+    const orderData = {
+      user: user && user._id,
+      orderItems: checkoutCart.map(cart => ({
+        plant: cart.plant._id,
+        nursery: cart.nursery._id,
+        nurseryName: cart.nursery.nurseryName,
+        plantName: cart.plant.plantName,
+        images: cart.plant.images[0],
+        price: cart.plant.price,
+        discount: cart.plant.discount,
+        quantity: cart.quantity,
+      })),
+      shippingInfo: selectedAddress,
+      pricing,
+      payment: payment,
+    };
 
-    const handelInitOrder = (payment) => {
-      const orderData = {
-          user: user && user._id,
-          orderItems: checkoutCart.map(cart => ({
-              plant: cart.plant._id,
-              nursery: cart.nursery._id,
-              nurseryName: cart.nursery.nurseryName,
-              plantName: cart.plant.plantName,
-              images: cart.plant.images[0],
-              price: cart.plant.price,
-              discount: cart.plant.discount,
-              quantity: cart.quantity,
-          })),
-          shippingInfo: selectedAddress,
-          pricing,
-          payment: payment,
-      }
+    dispatch(createOrderHistoryAsync(orderData));
+  }, [dispatch, user, checkoutCart, selectedAddress, pricing]);
 
-      dispatch(createOrderHistoryAsync(orderData));
-  }
-
-
-  const handelGetClientKey = async () => {
+  const handelGetClientKey = useCallback(async () => {
     try {
-      const result = await handelDataFetchCheckout("/api/v2/checkout/stripe/public/key",  "GET" );
+      const result = await handelDataFetchCheckout("/api/v2/checkout/stripe/public/key", "GET");
 
       if (result) {
         setClientKey(result.result.stripeApiKey);
       } else {
-        message.error("Invalid Payment Session!.")
-        throw new Error(result.message)
-      }
-    } catch (error) {
-      console.log(error);
-      navigate('/');
-    }
-  }
-
-  const handelClientSecretKey = async () => {
-    try {
-      const result = await handelDataFetchCheckout("/api/v2/checkout/payments",  "POST", { amount });
-      if (result.status) {
-        setClientSecret(result.result.client_secret);
-        setAmount(result.result.amount);
-
-        //* creating the order init
-        handelInitOrder(result.result);
-
-      } else {
-        message.error("Invalid Payment Session!.")
+        message.error("Invalid Payment Session!");
         throw new Error(result.message);
       }
     } catch (error) {
       console.log(error);
       navigate('/');
     }
-  }
+  }, [navigate]);
 
+  const handelClientSecretKey = useCallback(async () => {
+    try {
+      const result = await handelDataFetchCheckout("/api/v2/checkout/payments", "POST", { amount });
+      if (result.status) {
+        setClientSecret(result.result.client_secret);
+        setAmount(result.result.amount);
+
+        // Creating the order init
+        handelInitOrder(result.result);
+      } else {
+        message.error("Invalid Payment Session!");
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.log(error);
+      navigate('/');
+    }
+  }, [amount, navigate, handelInitOrder]);
 
   useEffect(() => {
     handelGetClientKey();
     handelClientSecretKey();
-  }, []);
+  }, [handelGetClientKey, handelClientSecretKey]);
 
   return (
     <section className='position-fixed w-100 h-100 top-0 section-checkout p-1'>

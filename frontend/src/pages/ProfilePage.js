@@ -16,22 +16,19 @@ const ProfilePage = () => {
 
     const navigate = useNavigate();
 
-    const handelProfilePage = () => {
+    useEffect(() => {
+        if (!user) {
+            dispatch(userProfileAsync());
+        }
+    }, [dispatch, user]); // Add user to the dependency array
+
+    useEffect(() => {
         if (!user) {
             navigate("/login");
         }
-    }
-
-    useEffect(() => {
-        !user && dispatch(userProfileAsync());
-    }, [dispatch])
-
-    useEffect(() => {
-        handelProfilePage();
-    }, [dispatch, user]);
+    }, [navigate, user]); // Add navigate and user to the dependency array
 
     return (
-        // TODO: add the customizations avatar images based on the gender.
         <section className='bg-section'>
             {
                 user &&
@@ -59,4 +56,4 @@ const ProfilePage = () => {
     )
 }
 
-export default ProfilePage
+export default ProfilePage;

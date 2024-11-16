@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import AnimationSVG from './AnimationSVG';
 
-
 const Headers = () => {
 
     const headerImg = "https://res.cloudinary.com/dcd6y2awx/image/upload/f_auto,q_auto/v1/PlantSeller/UI%20Images/header-images";

@@ -3,8 +3,6 @@ import { message } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const UserVerificationEmailSent = () => {
     <title>Account Verification</title>
 

@@ -20,7 +20,7 @@ const AddNewPlants = () => {
       }
     }
 
-  }, [user, nursery]);
+  }, [user, nursery, navigate]);
 
     return (
         nursery && <AddPlants />

@@ -1,31 +1,29 @@
-import React, { useEffect } from 'react'
-import SetNursery from '../features/nursery/Components/NurseryForms/SetNursery'
+import React, { useEffect } from 'react';
+import SetNursery from '../features/nursery/Components/NurseryForms/SetNursery';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const CreateNurseryPage = () => {
-    document.title = "Create Your Nursery";
+  document.title = "Create Your Nursery";
 
-    const user = useSelector(state => state.user.user);
-    const nursery = useSelector(state => state.nursery.nursery);
+  const user = useSelector(state => state.user.user);
+  const nursery = useSelector(state => state.nursery.nursery);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if(!user) {
-            navigate("/login?redirect=/nursery/create")
-        } else {
-            if(user.role.includes("seller") || nursery) {
-                navigate("/nursery")
-            }
-        }
-        
-    }, [user, nursery]);
+  useEffect(() => {
+    if (!user) {
+      navigate("/login?redirect=/nursery/create");
+    } else {
+      if (user.role.includes("seller") || nursery) {
+        navigate("/nursery");
+      }
+    }
+  }, [user, nursery, navigate]); // Added 'navigate' to the dependency array
 
+  return (
+    user && <SetNursery />
+  );
+};
 
-    return (
-        user && <SetNursery />
-    )
-}
-
-export default CreateNurseryPage
+export default CreateNurseryPage;

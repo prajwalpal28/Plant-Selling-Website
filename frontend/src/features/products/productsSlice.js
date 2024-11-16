@@ -14,13 +14,13 @@ export const getAllProductsAsync = createAsyncThunk('products/fetchAllProducts',
     return response.data;
 });
 
-// TODO: check the rendering after deployment 
+// check the rendering after deployment 
 export const getProductsByCategoryAsync = createAsyncThunk('products/fetchProductsByCategory', async (category) => {
     const response = await handelDataFetch(`/api/v2/products/plantsByCategory/${category}`, 'GET');
     return response.data;
 })
 
-// TODO: check the rendering after deployment 
+// check the rendering after deployment 
 export const getProductAsync = createAsyncThunk('products/fetchProduct', async (_id) => {
     const response = await handelDataFetch(`/api/v2/products/plant/${_id}`, 'GET');
     return response.data;

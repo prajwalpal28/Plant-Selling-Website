@@ -135,7 +135,7 @@ const twoSectionAndLeftFour = {
 }
 
 
-export {completeSection, twoSection, fourSection, twoSectionAndRightVertical, twoSectionAndRightFour, twoSectionAndLeftVertical, twoSectionAndLeftFour};
+export { completeSection, twoSection, fourSection, twoSectionAndRightVertical, twoSectionAndRightFour, twoSectionAndLeftVertical, twoSectionAndLeftFour };
 
 
 

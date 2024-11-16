@@ -20,7 +20,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     dispatch(getProductAsync(_id));
-  }, []);
+  }, [_id, dispatch]); // Add _id and dispatch as dependencies
 
   return (
     <>
@@ -43,4 +43,4 @@ const ProductPage = () => {
   )
 }
 
-export default ProductPage
+export default ProductPage;

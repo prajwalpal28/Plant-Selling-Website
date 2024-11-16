@@ -51,7 +51,7 @@ import PasswordResetEmailSentPage from "./pages/PasswordResetEmailSentPage";
 
 
 
-export const UserContext = createContext(); // TODO: REMOVE AFTER REFACTOR ALL THE CODE.
+export const UserContext = createContext(); 
 
 
 const Routing = () => {

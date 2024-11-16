@@ -85,14 +85,19 @@ const userSchema = new mongoose.Schema({
 // generating the JWT Tokens 
 userSchema.methods.generateAuthToken = async function () {
     try {
+        if (!process.env.SECRET_KEY) {
+            throw new Error("SECRET_KEY is not defined");
+        }
         const token = jwt.sign({ _id: this._id.toString() }, process.env.SECRET_KEY, { expiresIn: "6h" });
         this.tokens = this.tokens.concat({ token });
         await this.save();
         return token;
     } catch (err) {
-        console.log(err);
+        console.log("Error generating token:", err.message);
+        throw err;
     }
-}
+};
+
 
 userSchema.pre("save", async function (next) {
     if (this.isModified("password")) {

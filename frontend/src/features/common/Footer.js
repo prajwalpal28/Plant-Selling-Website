@@ -60,17 +60,17 @@ const Footer = () => {
                                 <div className="d-flex flex-column align-items-start pe-3">
 
                                     <h6 className="text-uppercase fw-bold mb-4">Contact Us</h6>
-                                    <p><i className="far fa-address-card me-3 text-secondary"></i> Mohali, Punjab, India.</p>
+                                    <p><i className="far fa-address-card me-3 text-secondary"></i>Pune, Maharashtra, India.</p>
                                     <p>
-                                        <Link to="mailto:piyushraj2340@gmail.com" className='text-light'>
+                                        <Link to="mailto:palprajwal18@gmail.com" className='text-light'>
                                             <i className="fas fa-envelope me-3 text-secondary"></i>
-                                            piyushraj2340@gmail.com
+                                            palprajwal18@gmail.com
                                         </Link>
                                     </p>
                                     <p>
-                                        <Link to="tel:+917463980230" className='text-light'>
+                                        <Link to="tel:+918080480114" className='text-light'>
                                             <i className="fas fa-phone me-3 text-secondary"></i>
-                                            +917463980230
+                                            +91 8080480114
                                         </Link>
 
                                     </p>
@@ -101,26 +101,26 @@ const Footer = () => {
                         <span>connected with us on social networks:</span>
                     </div>
                     <div>
-                        <Link to="https://www.facebook.com/Piyushraj2340/" className="me-4 link-secondary">
+                        <Link to="#" className="me-4 link-secondary">
                             <i className="fab fa-facebook-f"></i>
                         </Link>
-                        <Link to="https://twitter.com/piyushraj2340" className="me-4 link-secondary">
+                        <Link to="#" className="me-4 link-secondary">
                             <i className="fab fa-twitter"></i>
                         </Link>
-                        <Link to="https://www.instagram.com/piyushraj2340/" className="me-4 link-secondary">
+                        <Link to="#" className="me-4 link-secondary">
                             <i className="fab fa-instagram"></i>
                         </Link>
-                        <Link to="https://www.linkedin.com/in/piyushraj2340/" className="me-4 link-secondary">
+                        <Link to="#" className="me-4 link-secondary">
                             <i className="fab fa-linkedin"></i>
                         </Link>
-                        <Link to="https://github.com/piyushraj2340" className="me-4 link-secondary">
+                        <Link to="#" className="me-4 link-secondary">
                             <i className="fab fa-github"></i>
                         </Link>
                     </div>
                 </section>
                 <div className="text-center p-4" style={{ backgroundColor: "rgba(0, 0, 0, 0.025)" }}>
-                    © 2021 Copyright:
-                    <Link className="text-reset fw-bold" to="/"> https://plantseller.vercel.app</Link>
+                    © 2024 Copyright
+                    <Link className="text-reset fw-bold" to="/"></Link>
                 </div>
             </div>
         </footer>

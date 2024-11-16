@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Steps, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getConfirmOrderDataAsync, getSelectedShippingAsync, getValidateCheckoutAsync } from '../checkoutSlice';
-
-
+import { getConfirmOrderDataAsync, getValidateCheckoutAsync } from '../checkoutSlice';
 
 const Confirm = () => {
     const isSessionError = useSelector(state => state.checkout.isSessionError);
@@ -15,44 +13,49 @@ const Confirm = () => {
     const dispatch = useDispatch();
 
     const activeStep = 1;
-
     const navigate = useNavigate();
 
-    const handelValidateOrder = async () => {
+    // Memoize the function to avoid unnecessary re-renders
+    const handelValidateOrder = useCallback(async () => {
         dispatch(getValidateCheckoutAsync());
-        if(isSessionError) {
+        if (isSessionError) {
             message.error(isSessionError.message);
             navigate("/");
         }
-    }
+    }, [dispatch, isSessionError, navigate]);
 
     useEffect(() => {
         handelValidateOrder();
-    }, [isSessionError])
+    }, [isSessionError, handelValidateOrder]);
 
     useEffect(() => {
-        !checkoutCart.length && dispatch(getConfirmOrderDataAsync());
-    }, [checkoutCart])
-    
+        if (!checkoutCart.length) {
+            dispatch(getConfirmOrderDataAsync());
+        }
+    }, [checkoutCart, dispatch]);
 
     const handelChangeActiveStep = (step) => {
         if (step > activeStep) return;
 
         switch (step) {
-            case 0: navigate('/checkout/shipping');
+            case 0:
+                navigate('/checkout/shipping');
                 break;
-            case 1: navigate('/checkout/confirm');
+            case 1:
+                navigate('/checkout/confirm');
                 break;
-            case 2: navigate('/checkout/payment');
+            case 2:
+                navigate('/checkout/payment');
                 break;
-            default: navigate('/');
+            default:
+                navigate('/');
         }
-    }
+    };
 
     const handelCheckout = () => {
         handelValidateOrder();
         navigate('/checkout/payment');
-    }
+    };
 
     const stepsOptions = [
         {
@@ -61,12 +64,13 @@ const Confirm = () => {
         },
         {
             title: 'Confirm Order',
-            icon: <span className='	fas fa-check-square'></span>,
+            icon: <span className='fas fa-check-square'></span>,
         },
         {
             title: 'Payment',
             icon: <span className='fas fa-university'></span>,
-        },];
+        }
+    ];
 
     return (
         <section className='position-fixed w-100 h-100 top-0 section-checkout p-1 overflow-y-auto'>

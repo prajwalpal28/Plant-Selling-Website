@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import EditNursery from '../features/nursery/Components/NurseryForms/EditNursery'
+import React, { useEffect } from 'react';
+import EditNursery from '../features/nursery/Components/NurseryForms/EditNursery';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,18 +13,17 @@ const EditNurseryPage = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/login?redirect=/nursery/update")
+      navigate("/login?redirect=/nursery/update");
     } else {
       if (!user.role.includes("seller") && !nursery) {
-        navigate("/profile")
+        navigate("/profile");
       }
     }
-
-  }, [user, nursery]);
+  }, [user, nursery, navigate]); // Added 'navigate' to the dependencies array
 
   return (
     nursery && <EditNursery />
-  )
-}
+  );
+};
 
-export default EditNurseryPage
+export default EditNurseryPage;

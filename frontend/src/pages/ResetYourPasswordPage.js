@@ -7,27 +7,26 @@ import ChangeYourPassword from "../features/auth/Components/ChangeYourPassword";
 import { validatePasswordResetTokenAsync } from '../features/auth/authSlice';
 
 const ResetYourPasswordPage = () => {
-    document.title = "Change your password";
+  document.title = "Change your password";
 
   let { isValidTokenPassword, passwordChangeSuccessful } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
-
   const { token } = useParams();
 
   useEffect(() => {
     dispatch(validatePasswordResetTokenAsync(token));
-  }, [dispatch]);
+  }, [dispatch, token]); // Add token to the dependency array
 
-  if(isValidTokenPassword === null && passwordChangeSuccessful === null) {
+  if (isValidTokenPassword === null && passwordChangeSuccessful === null) {
     return null;
   }
-  
+
   if (passwordChangeSuccessful) {
     return <PasswordChangeSuccessfully />;
   } else {
     return (
-        isValidTokenPassword ? <ChangeYourPassword token={token} /> : <PasswordResetTokenInvalid />
+      isValidTokenPassword ? <ChangeYourPassword token={token} /> : <PasswordResetTokenInvalid />
     )
   }
 };

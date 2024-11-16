@@ -15,7 +15,7 @@ const Products = () => {
 
     useEffect(() => {
         dispatch(getAllProductsAsync());
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="container product-container mb-4 mb-md-5">

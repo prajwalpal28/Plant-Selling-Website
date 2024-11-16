@@ -1,39 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Steps, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { addressListDataFetchAsync } from '../../address/addressSlice';
 import { getSelectedShippingAsync, updateSelectedShippingAsync, getValidateCheckoutAsync } from '../checkoutSlice';
 
-
-
 const Shipping = () => {
-
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
     const addressList = useSelector(state => state.address.addressList);
     const selectedAddress = useSelector(state => state.checkout.shipping);
     const isSessionError = useSelector(state => state.checkout.isSessionError);
 
-    const dispatch = useDispatch();
-
     const noPlantsImage = "https://res.cloudinary.com/dcd6y2awx/image/upload/f_auto,q_auto/v1/PlantSeller/UI%20Images/no-data-found";
-
+    
     const activeStep = 0;
 
-    const navigate = useNavigate();
+    // Memoize the function to avoid unnecessary re-renders
+    const handelGetSelectedAddress = useCallback(() => {
+        dispatch(getSelectedShippingAsync());
+    }, [dispatch]);
 
     const handelChangeActiveStep = (step) => {
         if (step > activeStep) return;
 
         switch (step) {
-            case 0: navigate('/checkout/shipping');
+            case 0:
+                navigate('/checkout/shipping');
                 break;
-            case 1: navigate('/checkout/confirm');
+            case 1:
+                navigate('/checkout/confirm');
                 break;
-            case 2: navigate('/checkout/payment');
+            case 2:
+                navigate('/checkout/payment');
                 break;
-            default: navigate('/');
+            default:
+                navigate('/');
         }
-    }
+    };
 
     const handelChangeAddress = async (_id) => {
         const address = addressList.find((address) => address._id === _id);
@@ -41,30 +46,31 @@ const Shipping = () => {
         const data = {
             address,
             navigate
-        }
+        };
 
-        dispatch(updateSelectedShippingAsync(data))
-    }
-
-    const handelGetSelectedAddress = async () => {
-        dispatch(getSelectedShippingAsync());
-    }
+        dispatch(updateSelectedShippingAsync(data));
+    };
 
     useEffect(() => {
         dispatch(getValidateCheckoutAsync());
-        if(isSessionError) {
+
+        if (isSessionError) {
             message.error(isSessionError.message);
             navigate("/");
         }
-    }, [isSessionError]);
+    }, [isSessionError, navigate, dispatch]);
 
     useEffect(() => {
-        !addressList.length && dispatch(addressListDataFetchAsync());
-    }, [addressList]);
+        if (!addressList.length) {
+            dispatch(addressListDataFetchAsync());
+        }
+    }, [addressList, dispatch]);
 
-    useEffect(() =>{
-        !selectedAddress && handelGetSelectedAddress();
-    }, [selectedAddress]);
+    useEffect(() => {
+        if (!selectedAddress) {
+            handelGetSelectedAddress();
+        }
+    }, [selectedAddress, handelGetSelectedAddress]);
 
     const stepsOptions = [
         {
@@ -73,12 +79,13 @@ const Shipping = () => {
         },
         {
             title: 'Confirm Order',
-            icon: <span className='	fas fa-check-square'></span>,
+            icon: <span className='fas fa-check-square'></span>,
         },
         {
             title: 'Payment',
             icon: <span className='fas fa-university'></span>,
-        }];
+        }
+    ];
 
     return (
         <section className='position-fixed w-100 h-100 top-0 section-checkout p-1'>

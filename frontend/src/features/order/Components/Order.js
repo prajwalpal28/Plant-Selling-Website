@@ -33,7 +33,7 @@ const Order = () => {
         }
 
         dispatch(getOrderHistoryAsync(data));
-    }, [])
+    }, [dispatch, orderFilterByDate, orderPage, orderSearch])
 
     const itemRender = (_, type, originalElement) => {
         if (type === 'prev') {
@@ -108,7 +108,7 @@ const Order = () => {
         if (event.key === 'Enter') {
             handelOrderSearch();
         }
-      };
+    };
 
     return (
         <section className="bg-section">

@@ -16,7 +16,7 @@ const ProfileAddress = () => {
             setAddress(addressList[0]);
         }
 
-    }, [addressList])
+    }, [addressList,dispatch])
 
     return (
         <div className="col-md-12">

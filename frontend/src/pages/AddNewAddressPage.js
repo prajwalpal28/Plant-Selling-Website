@@ -13,7 +13,7 @@ const AddNewAddressPage = () => {
         if (!user) {
             navigate("/login?redirect=/address/new");
         }
-    }, [])
+    }, [user, navigate])
 
     return (
         user && <AddAddress />

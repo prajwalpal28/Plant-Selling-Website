@@ -1,46 +1,42 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react';
 import Login from '../features/auth/Components/Login';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userProfileAsync } from '../features/user/userSlice';
-import { resetState } from '../features/auth/authSlice'
+import { resetState } from '../features/auth/authSlice';
 
 const LoginPage = () => {
-    document.title = "Login";
+  document.title = "Login";
 
-    const user = useSelector(state => state.user.user);
-    const {isUserVerificationNeeded, email} = useSelector(state => state.auth);
+  const user = useSelector(state => state.user.user);
+  const { isUserVerificationNeeded, email } = useSelector(state => state.auth);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-
-    
-
-    const handleGetUserData = async () => {
-        !user && dispatch(userProfileAsync());
-        if (user) {
-            const [redirect, to] = window.location.search && window.location.search.split("=");
-            navigate(redirect === "?redirect" ? to : "/profile");
-            return;
-        }
+  // Memoize the function to prevent it from being recreated on every render
+  const handleGetUserData = useCallback(async () => {
+    if (!user) {
+      dispatch(userProfileAsync());
     }
+    if (user) {
+      const [redirect, to] = window.location.search && window.location.search.split("=");
+      navigate(redirect === "?redirect" ? to : "/profile");
+    }
+  }, [dispatch, navigate, user]); // Add dependencies
 
-    useEffect(() => {
-        if(isUserVerificationNeeded) {
-            navigate(`/account/verificationEmail?email=${email}`);
-            dispatch(resetState());
-            return;
-        }
-    }, [dispatch, isUserVerificationNeeded])
+  useEffect(() => {
+    if (isUserVerificationNeeded) {
+      navigate(`/account/verificationEmail?email=${email}`);
+      dispatch(resetState());
+    }
+  }, [dispatch, isUserVerificationNeeded, email, navigate]); // Include email and navigate
 
-    useEffect(() => {
-        handleGetUserData();
-    }, [dispatch, user]);
+  useEffect(() => {
+    handleGetUserData();
+  }, [handleGetUserData]); // Use memoized version
 
-    return (
-        <Login />
-    )
-}
+  return <Login />;
+};
 
-export default LoginPage
+export default LoginPage;

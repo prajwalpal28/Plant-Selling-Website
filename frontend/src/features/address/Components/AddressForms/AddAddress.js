@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,11 +74,11 @@ function AddAddress() {
             if (value === "") {
                 setErrorMessage({ ...errorMessage, [name]: { status: true, message: `${name} is required.`, target: e.target } });
             } else if ((name === "name") && (value.length < 3 || value.length >= 30)) {
-                setErrorMessage({ ...errorMessage, ["name"]: { status: true, message: `The length of the Name is greater than 3 and less than 30.`, target: e.target } });
+                setErrorMessage({ ...errorMessage, name: { status: true, message: `The length of the Name is greater than 3 and less than 30.`, target: e.target } });
             } else if ((name === "phone") && (Number(value).toString().length !== 10)) {
-                setErrorMessage({ ...errorMessage, ["phone"]: { status: true, message: `Length of the mobile must be 10.`, target: e.target } });
+                setErrorMessage({ ...errorMessage, phone: { status: true, message: `Length of the mobile must be 10.`, target: e.target } });
             } else if ((name === "pinCode") && (value.length !== 6)) {
-                setErrorMessage({ ...errorMessage, ["pinCode"]: { status: true, message: `Length of the Pin Code must be 6.`, target: e.target } });
+                setErrorMessage({ ...errorMessage, pinCode: { status: true, message: `Length of the Pin Code must be 6.`, target: e.target } });
             } else {
                 setErrorMessage({ ...errorMessage, [name]: { status: false, message: "", target: "" } });
             }

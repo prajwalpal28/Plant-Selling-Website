@@ -65,10 +65,10 @@ function AddPlants() {
             plant.images.push(e.target.files[0]);
             setPlants({ ...plant, [name]: plant.images });
         } else {
-            if (value === "") {
+            if (value === "") { 
                 setErrorMessages({ ...errorMessage, [name]: { status: true, message: `${name} is required.`, target: e.target } });
             } else if ((name === "plantName") && (value.length < 3 || value.length >= 30)) {
-                setErrorMessages({ ...errorMessage, ["plantName"]: { status: true, message: `The length of the Plant Name is greater than 3 and less than 30.`, target: e.target } });
+                setErrorMessages({ ...errorMessage, plantName: { status: true, message: `The length of the Plant Name is greater than 3 and less than 30.`, target: e.target } });
             } else if ((name === "discount") && (value < 0 || value > 100)) {
                 setErrorMessages({ ...errorMessage, [name]: { status: true, message: `value must be greater then 0 and smaller then 100.`, target: e.target } });
             } else if (e.target.type === "number" && value < 0) {
@@ -178,7 +178,7 @@ function AddPlants() {
 
                             <div className="form-outline  col-md-6 ps-md-2">
                                 <label htmlFor="category" className='ps-1 my-2'>Category: <span className="text-danger small">*</span></label>
-                                <select type="text" name='category' id="category" defaultValue={plant.category == "" ? "none" : plant.category} className="form-control" placeholder='Category' onChange={handleInputs} >
+                                <select type="text" name='category' id="category" defaultValue={plant.category === "" ? "none" : plant.category} className="form-control" placeholder='Category' onChange={handleInputs} >
                                     <option value="none" disabled >--Select Category--</option>
                                     <option value="flowering-plants">Flowering Plants</option>
                                     <option value="medicinal-plants">Medicinal Plants</option>

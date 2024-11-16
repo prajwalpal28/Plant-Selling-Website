@@ -6,7 +6,6 @@ import InvalidVerificationToken from '../features/auth/Components/InvalidVerific
 import VerificationConfirmAccount from '../features/auth/Components/VerificationConfirmAccount';
 import AccountVerificationCompleted from '../features/auth/Components/AccountVerificationCompleted';
 
-
 const UserVerificationConfirmAccount = () => {
   document.title = "Confirm Account";
 
@@ -18,7 +17,7 @@ const UserVerificationConfirmAccount = () => {
 
   useEffect(() => {
     dispatch(validateVerificationTokenAsync(token));
-  }, [dispatch]);
+  }, [dispatch, token]); // Add 'token' to the dependency array
 
   if(isValidToken === null && verificationCompleted === null) {
     return null;
@@ -29,8 +28,8 @@ const UserVerificationConfirmAccount = () => {
   } else {
     return (
       isValidToken ? <VerificationConfirmAccount token={token} /> : <InvalidVerificationToken />
-    )
+    );
   }
 }
 
-export default UserVerificationConfirmAccount
+export default UserVerificationConfirmAccount;

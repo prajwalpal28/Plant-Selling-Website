@@ -1,3 +1,5 @@
+// require('dotenv').config();
+
 export function handelImageUploadNurseryHeader(image) {
     return new Promise(async (resolve, rejected) => {
         try {

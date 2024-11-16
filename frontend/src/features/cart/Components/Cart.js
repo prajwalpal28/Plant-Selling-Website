@@ -26,7 +26,7 @@ function Cart() {
   useEffect(() => {
     dispatch(clearIsSessionError());
     dispatch(cartDataFetchAsync());
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (user) {

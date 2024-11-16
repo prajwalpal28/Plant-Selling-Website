@@ -17,7 +17,7 @@ const NurseryMain = ({ isCollapseSideNav }) => {
     useEffect(() => {
         !nursery && dispatch(nurseryProfileAsync());
         nursery && dispatch(nurseryStoreDataAsync());
-    }, []);
+    }, [nursery, dispatch]);
 
 
     const [content] = nurseryStore && nurseryStore.filter(elem => elem.tabName.toLocaleLowerCase() === isCurrentTab.toLocaleLowerCase());

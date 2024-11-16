@@ -11,7 +11,7 @@ const ProfileOrder = () => {
 
     useEffect(() => {
         dispatch(getLastOrderAsync());
-    }, [])
+    }, [dispatch])
 
     return (
         <div className="col-md-12">

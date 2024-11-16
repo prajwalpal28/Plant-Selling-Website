@@ -13,7 +13,7 @@ const AddressPage = () => {
     if(!user) {
       navigate("/login?redirect=/address");
     }
-  }, [])
+  }, [navigate, user])
 
   return (
     user && <Address />

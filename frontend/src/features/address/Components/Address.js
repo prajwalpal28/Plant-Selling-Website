@@ -9,7 +9,7 @@ function Address() {
 
   useEffect(() => {
     dispatch(addressListDataFetchAsync());
-  }, [])
+  }, [dispatch])
 
   const deleteAddress = async (_id) => {
     dispatch(addressDeleteAsync(_id));
