@@ -54,7 +54,7 @@ plant-seller/
    - And more...
 
 3. **Admin:**
-   - All access of the website
+   - All-access of the website
    - Manage users
    - Manage nurseries
    - Manage plants
@@ -79,7 +79,7 @@ plant-seller/
 
 
 ```
-git clone https://github.com/piyushraj2340/Plant-Selling-Website.git
+[https://github.com/prajwalpal28/Plant-Selling-Website.git]
 ```
 
 2. Install dependencies:
@@ -97,7 +97,7 @@ npm install
 
    - Create a `.env` file in the backend directory.
    - Define environment variables such as `PORT`, `MONGODB_URI`, `STRIPE_SECRET_KEY`, etc.
-   - For a complete reference, please follow [Issue #2](https://github.com/piyushraj2340/Plant-Selling-Website/issues/2#issuecomment-2414624938).
+   - For a complete reference, please follow [https://github.com/prajwalpal28].
 
 4. Run the frontend development server:
 
@@ -129,7 +129,7 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 
 **Contact:**
 
-For any inquiries or support, please contact [Piyush Raj](piyushraj2340@gmail.com).
+For any inquiries or support, please contact [Prajwal Pal](palprajwal18@gmail.com).
 
 ---
 
